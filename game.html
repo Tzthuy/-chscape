@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Thoát khỏi nồi nước</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Patrick Hand', cursive;
+      background-image: url('noinuoc.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      color: #fff;
+    }
+
+    .game-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .temperature-bar {
+      width: 90%;
+      max-width: 400px;
+      height: 30px;
+      border: 2px solid #fff;
+      background-color: rgba(255,255,255,0.2);
+      margin-bottom: 40px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .heat-level {
+      height: 100%;
+      width: 16.67%; /* Khởi tạo 1/6 thanh */
+      background: linear-gradient(to right, #00bfff, #00bfff);
+      transition: width 0.5s ease, background 0.5s ease;
+    }
+
+    .question-box {
+      background-color: rgba(0,0,0,0.6);
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 700px;
+      text-align: center;
+    }
+
+    .question-box h2 {
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .answers button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 1.3rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      font-family: 'Patrick Hand', cursive;
+    }
+
+    .answers button:hover {
+      background-color: #43a047;
+    }
+
+    .shake {
+      animation: shake 0.5s;
+    }
+
+    @keyframes shake {
+      0% { transform: translate(0px, 0px) rotate(0deg); }
+      25% { transform: translate(2px, -2px) rotate(1deg); }
+      50% { transform: translate(-2px, 2px) rotate(-1deg); }
+      75% { transform: translate(2px, 2px) rotate(1deg); }
+      100% { transform: translate(-2px, -2px) rotate(-1deg); }
+    }
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+  </style>
+
+</head>
+<body>
+  <div class="game-container">
+    <div class="temperature-bar">
+      <div class="heat-level" id="heatLevel"></div>
+    </div>
+
+    <div class="question-box" id="questionBox">
+      <!-- Câu hỏi sẽ hiện ở đây -->
+    </div>
+  </div>
+
+  <audio id="boilingSound" loop autoplay>
+    <source src="nuocsuoi.mp3" type="audio/mpeg">
+  </audio>
+
+  <audio id="boilingLoud" loop>
+    <source src="nuocsoimanh.mp3" type="audio/mpeg">
+  </audio>
+
+<script>
+  const questions = [
+    { question: "Bạn có tìm thấy niềm vui trong những việc mình làm mỗi ngày không?", answers: [ { text: "Cứ làm cho hết ngày, không rõ mình có vui không.", correct: false }, { text: "Mình vẫn thấy niềm vui xen kẽ dù đôi lúc có hơi mệt.", correct: true } ] },
+    { question: "Bạn sẽ xoay xở thế nào khi mọi việc dồn dập cùng lúc?", answers: [ { text: "Xem xét việc nào nên ưu tiên trước.", correct: true }, { text: "Làm đại cho xong, không cần nghĩ nhiều.", correct: false } ] },
+    { question: "Một ngày của bạn có phải chỉ xoay quanh việc học và bài tập?", answers: [ { text: "Cứ quanh quẩn giữa học hành, bài vở,... đến mức không chắc bản thân có ổn không.", correct: false }, { text: "Dù bận rộn nhưng vẫn dành chút thời gian để nghỉ ngơi và không bị cuốn trôi khỏi chính mình.", correct: true } ] },
+    { question: "Khi ai đó hỏi 'Dạo này bạn sao rồi?', bạn sẽ trả lời như thế nào?", answers: [ { text: "Cho rằng mình ổn dù trong lòng thì không thấy vậy.", correct: false }, { text: "Thành thật chia sẻ cảm xúc thật của bản thân.", correct: true } ] },
+    { question: "Bạn có từng tự hỏi: 'Mình đang cố gắng vì điều gì?'", answers: [ { text: "Chưa rõ lắm, đôi khi thấy mơ hồ nên thường không nghĩ tới.", correct: false }, { text: "Có, đang từng ngày cố gắng để hiểu rõ mục tiêu của chính mình.", correct: true } ] },
+    { question: "Khi cảm thấy mệt mỏi triền miên, bạn sẽ làm gì?", answers: [ { text: "Tiếp tục quay cuồng vì không biết nên dừng lại ở đâu.", correct: false }, { text: "Chậm lại một nhịp để hiểu mình đang cần gì.", correct: true } ] },
+    { question: "Gần đây, bạn có còn cảm thấy bản thân là chính mình không?", answers: [ { text: "Mình cảm thấy lạc lõng và chưa định vị được bản thân đang ở đâu.", correct: false }, { text: "Đôi lúc hơi chênh vênh nhưng vẫn không quên mình là ai.", correct: true } ] }
+  ];
+
+  let currentQuestion = 0;
+  let heat = 16.67; // Bắt đầu từ 1/6
+  const minHeat = 16.67;
+  const heatBar = document.getElementById("heatLevel");
+  const questionBox = document.getElementById("questionBox");
+  const boilingLoud = document.getElementById("boilingLoud");
+
+  function showQuestion() {
+    if (currentQuestion >= questions.length) {
+      questionBox.innerHTML = "<h2>🎉 Bạn đã vượt qua tất cả các câu hỏi! 🎉</h2>";
+      return;
+    }
+
+    const q = questions[currentQuestion];
+    let html = `<h2>${q.question}</h2><div class="answers">`;
+    q.answers.forEach(answer => {
+      html += `<button onclick="handleAnswer(${answer.correct})">${answer.text}</button>`;
+    });
+    html += "</div>";
+    questionBox.innerHTML = html;
+  }
+
+  function updateHeatDisplay() {
+    heatBar.style.width = heat + "%";
+
+    if (heat < 40) {
+      heatBar.style.background = "linear-gradient(to right, #00bfff, #00bfff)";
+    } else if (heat < 70) {
+      heatBar.style.background = "linear-gradient(to right, #00bfff, orange)";
+    } else {
+      heatBar.style.background = "linear-gradient(to right, orange, red)";
+    }
+  }
+
+  function handleAnswer(correct) {
+    if (!correct) {
+      heat += 15;
+      if (heat > 100) heat = 100;
+
+      document.body.classList.add("shake");
+      setTimeout(() => document.body.classList.remove("shake"), 500);
+
+      alert("Sai rồi! Nhiệt đang tăng lên...");
+    } else {
+      heat -= 10;
+      if (heat < minHeat) heat = minHeat;
+    }
+
+    if (heat >= 80) {
+      boilingLoud.play();
+    } else {
+      boilingLoud.pause();
+      boilingLoud.currentTime = 0;
+    }
+
+    updateHeatDisplay();
+    currentQuestion++;
+    showQuestion();
+  }
+
+  updateHeatDisplay();
+  showQuestion();
+function showQuestion() {
+ if (currentQuestion >= questions.length) {
+  document.body.classList.add("fade-out");
+  setTimeout(() => {
+    if (heat >= 80) {
+      window.location.href = "canhbao.html";
+    } else {
+      window.location.href = "nhacnho.html";
+    }
+  }, 800); // delay đúng bằng thời gian transition
+  return;
+}
+
+  const q = questions[currentQuestion];
+  let html = `<h2>${q.question}</h2><div class="answers">`;
+  q.answers.forEach(answer => {
+    html += `<button onclick="handleAnswer(${answer.correct})">${answer.text}</button>`;
+  });
+  html += "</div>";
+  questionBox.innerHTML = html;
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bạn muốn là học sinh nào?</title>
+  <link href="https://fonts.googleapis.com/css2?family=Coiny&display=swap" rel="stylesheet"/>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #FFF7D1;
+      font-family: 'Coiny', cursive;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      color: #FFD966;
+      font-size: 20px;
+      animation: twinkle 3s infinite alternate;
+    }
+
+    @keyframes twinkle {
+      from { opacity: 1; transform: scale(1) rotate(0deg); }
+      to { opacity: 0.4; transform: scale(1.3) rotate(20deg); }
+    }
+
+    /* TẠO THẬT NHIỀU SAO */
+    /* Tui để sẵn 20 sao, bạn muốn thêm 50 cũng được */
+
+    .star:nth-child(1) { top: 5%; left: 10%; font-size: 20px; }
+    .star:nth-child(2) { top: 15%; left: 80%; font-size: 24px; }
+    .star:nth-child(3) { top: 25%; left: 50%; font-size: 18px; }
+    .star:nth-child(4) { top: 35%; left: 20%; font-size: 22px; }
+    .star:nth-child(5) { top: 45%; left: 70%; font-size: 26px; }
+    .star:nth-child(6) { top: 55%; left: 40%; font-size: 19px; }
+    .star:nth-child(7) { top: 65%; left: 15%; font-size: 20px; }
+    .star:nth-child(8) { top: 75%; left: 60%; font-size: 22px; }
+    .star:nth-child(9) { top: 85%; left: 30%; font-size: 24px; }
+    .star:nth-child(10) { top: 95%; left: 50%; font-size: 18px; }
+    .star:nth-child(11) { top: 10%; left: 30%; font-size: 25px; }
+    .star:nth-child(12) { top: 20%; left: 60%; font-size: 20px; }
+    .star:nth-child(13) { top: 30%; left: 80%; font-size: 22px; }
+    .star:nth-child(14) { top: 40%; left: 10%; font-size: 19px; }
+    .star:nth-child(15) { top: 50%; left: 90%; font-size: 21px; }
+    .star:nth-child(16) { top: 60%; left: 25%; font-size: 24px; }
+    .star:nth-child(17) { top: 70%; left: 45%; font-size: 20px; }
+    .star:nth-child(18) { top: 80%; left: 75%; font-size: 22px; }
+    .star:nth-child(19) { top: 90%; left: 5%; font-size: 26px; }
+    .star:nth-child(20) { top: 95%; left: 85%; font-size: 18px; }
+
+    .cloud {
+      position: absolute;
+      width: 80px;
+      height: 40px;
+      background: #fff;
+      border-radius: 40px;
+    }
+
+    .cloud1 { top: 60px; left: 40%; }
+    .cloud2 { bottom: 80px; right: 20%; }
+
+    .title {
+      background: #FFE680;
+      border: 5px solid #8B5E00;
+      border-radius: 40px;
+      padding: 25px 50px;
+      font-size: 2.2rem;
+      color: #5A3A00;
+      text-align: center;
+      box-shadow: 0 6px 0 #8B5E00;
+      margin-bottom: 50px;
+      z-index: 1;
+    }
+/* SAO & MÂY */
+.star, .cloud {
+  position: absolute;
+  z-index: 0;  /* LUÔN DƯỚI */
+}
+
+.title,
+.characters,
+.button {
+  position: relative;
+  z-index: 1;  /* LUÔN TRÊN */
+}
+
+
+    .characters {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .character {
+      background: #fff;
+      border: 6px solid #F5D361;
+      border-radius: 30px;
+      padding: 20px;
+      width: 160px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .character:hover {
+      transform: translateY(-5px);
+    }
+
+    .character img {
+      width: 100%;
+      height: auto;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+
+    .character p {
+      color: #623A2A;
+      font-size: 1.5rem;
+    }
+    .button {
+      margin-top: 60px;
+      background: #FFE680;
+      border: 5px solid #8B5E00;
+      border-radius: 25px;
+      padding: 18px 60px;
+      font-size: 1.6rem;
+      color: #5A3A00;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #8B5E00;
+      text-decoration: none;
+      display: inline-block;
+      z-index: 1;
+    }
+
+    .button:hover {
+      background: #FFDD55;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 20 SAO CUTE -->
+  <div class="star">⭐</div><div class="star">⭐</div><div class="star">⭐</div><div class="star">⭐</div><div class="star">⭐</div>
+  <div class="star">⭐</div><div class="star">⭐</div><div class="star">⭐</div><div class="star">⭐</div><div class="star">⭐</div>
+  <div class="star">⭐</div><div class="star">⭐</div><div class="star">⭐</div><div class="star">⭐</div><div class="star">⭐</div>
+  <div class="star">⭐</div><div class="star">⭐</div><div class="star">⭐</div><div class="star">⭐</div><div class="star">⭐</div>
+
+
+  <!-- TIÊU ĐỀ -->
+  <div class="title">BẠN MUỐN LÀ<br>HỌC SINH NÀO?</div>
+
+  <!-- KHUNG NHÂN VẬT -->
+  <div class="characters">
+    <div class="character" onclick="chonNhanVat('Nam')">
+      <div class="character-inner">
+        <div class="avatar-bg">
+          <img src="nhanvatnam.png" alt="Nam"/>
+        </div>
+        <p>Nam</p>
+      </div>
+    </div>
+
+    <div class="character" onclick="chonNhanVat('Nữ')">
+      <div class="character-inner">
+        <div class="avatar-bg female">
+          <img src="nhanvatnu.png" alt="Nữ"/>
+        </div>
+        <p>Nữ</p>
+      </div>
+    </div>
+  </div>
+
+
+<script>
+  function chonNhanVat(gioiTinh) {
+    localStorage.setItem('gioiTinh', gioiTinh);
+    window.location.href = 'intro.html'; // sang trang intro luôn
+  }
+
+  </script>
+</body>
+</html>

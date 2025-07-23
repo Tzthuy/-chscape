@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Intro - Nồi Nước Nóng</title>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Patrick Hand', cursive;
+      background-image: url('nenlop.png');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      padding: 20px 24px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .content-box {
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      padding: 20px 28px;
+      border-radius: 20px;
+      max-width: 54%;
+      max-height: 78vh;
+      overflow-y: auto;
+      line-height: 1.25;
+      font-size: 1.3rem;
+      letter-spacing: 0.2px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    #startButton {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      background-color: #ff5252;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      align-self: flex-start;
+      display: none;
+    }
+
+    #startButton:hover {
+      background-color: #ff7a7a;
+    }
+
+.character-container {
+  width: fit-content;
+  padding: 0;
+  background-color: transparent;
+  align-self: flex-end;
+}
+
+.character-box {
+  position: absolute;
+  bottom: 0;
+  right: 24px;
+  background-color: transparent;
+}
+
+
+    .character {
+      height: 74vh;
+      object-fit: contain;
+      border-radius: 28 px;
+      background-color: transparent;
+      margin: 0;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="content-box">
+      <div id="storyText"></div>
+      <button id="startButton">Tiếp tục</button>
+    </div>
+    <div class="character-box">
+      <img id="characterImg" src="" alt="Nhân vật" class="character" />
+    </div>
+  </div>
+
+  <script>
+    const storyLines = [
+      "Mỗi ngày, bạn miệt mài học tập, tham gia các hoạt động, rồi lại quay về với bài vở.",
+      "Bạn nghĩ: “Chắc ai cũng vậy thôi...”",
+      "Thế rồi những áp lực, mỏi mệt cứ âm thầm tích tụ từng chút một...",
+      "... khiến bạn quen dần với những ngày mệt rã rời nhưng vẫn phải gồng mình chịu đựng.",
+      "Giống như chú ếch trong nồi nước ấm, bạn có thể đang mắc kẹt trong guồng quay vô hình chậm rãi cuốn bạn rời xa chính mình.",
+      "Liệu bạn có đang rơi vào hội chứng “Ếch luộc”?",
+      "Trò chơi này là một lời nhắc khẽ rằng: bạn cũng cần lắng nghe bản thân và tự hỏi - mình có kịp thời nhảy ra trước khi quá muộn không?"
+    ];
+
+    const storyText = document.getElementById("storyText");
+    const startButton = document.getElementById("startButton");
+    const characterImg = document.getElementById("characterImg");
+
+    const gioiTinh = localStorage.getItem("gioiTinh");
+    characterImg.src = gioiTinh === "Nam" || gioiTinh === "nam" ? "nhanvatnam.png" : "nhanvatnu.png";
+
+    const typingSound = new Audio("piano.mp3");
+    typingSound.volume = 0.2;
+
+    let currentLine = 0;
+    function typeLine(line, index = 0) {
+      if (index < line.length) {
+        storyText.innerHTML += line.charAt(index);
+        if (line.charAt(index) !== ' ') {
+          typingSound.currentTime = 0;
+          typingSound.play().catch(() => {});
+        }
+        setTimeout(() => typeLine(line, index + 1), 25);
+      } else {
+        storyText.innerHTML += "<br/><br/>";
+        currentLine++;
+        if (currentLine < storyLines.length) {
+          setTimeout(() => typeLine(storyLines[currentLine]), 400);
+        } else {
+          startButton.style.display = "inline-block";
+        }
+      }
+    }
+
+    typeLine(storyLines[currentLine]);
+
+    startButton.addEventListener("click", () => {
+      window.location.href = "game.html";
+    });
+  </script>
+</body>
+</html>
